@@ -1,0 +1,16 @@
+{% extends "home.html" %}
+{% block title %}Teacher Profile{% endblock %}
+{% block content %}
+
+<div class="module">
+	<img width="100" height="100" src="{% if object.profile_picture %}{{object.profile_picture.url }}{% else %} /styles/images/default.webp {% endif %}"/>
+	<h1>Fullname: {{object.first_name}} {{object.last_name}}</h1>
+	<p>Email: {{object.email}}</p>
+	<p>Phone: {{object.phone}}</p>
+	<p>Room No: {{object.room_no}}</p>
+	<h3>Subjects</h3>
+	{% for subj in object.subjects.all %}
+		<span>{{subj.name}}</span>
+	{% endfor %}
+</div>
+{% endblock %}

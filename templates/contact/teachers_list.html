@@ -27,7 +27,7 @@
 <div class="module">
 {% for teacher in object_list %}
 <div class="course-info">
-<ul><li><h3>{{ teacher.first_name }} {{teacher.last_name}} <a href="{% url 'teacher_details' teacher.id %}">About</a></h3></li></ul>
+<ul><li><h3>{{ teacher.first_name }} {{teacher.last_name}} <a href="{% url 'teacher_profile' teacher.id %}">About</a></h3></li></ul>
 
 </div>
 {% empty %}
