@@ -78,21 +78,27 @@ class TeachersListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['last_name_chars'] = self.get_the_last_name_chars()
+        context['subject_chars'] = self.get_the_last_subject_chars()
+        return context
+
+    def get_the_last_name_chars(self):
         last_name_chars = []
-        subject_chars = []
         for row in Teacher.objects.values_list('last_name', flat=True).filter(
                 last_name__isnull=False).exclude(last_name='').order_by('last_name').distinct():
             first_char = row.strip().upper()[0]
             if first_char not in last_name_chars:
                 last_name_chars.append(first_char)
+        return last_name_chars
+
+    def get_the_last_subject_chars(self):
+        subject_chars = []
         for row in Subject.objects.values_list('name', flat=True).filter(
                 name__isnull=False).exclude(name='').order_by('name').distinct():
             first_char = row.strip().upper()[0]
             if first_char not in subject_chars:
                 subject_chars.append(first_char)
-        context['last_name_chars'] = last_name_chars
-        context['subject_chars'] = subject_chars
-        return context
+        return subject_chars
 
     def get_queryset(self):
         queryset = self.model.objects.all()
