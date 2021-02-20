@@ -33,9 +33,9 @@
         </li>
         </ul>
     {% endif %}
-    <span class="user">
+    <span class="user" style="margin-left:75%">
     {% if request.user.is_authenticated %}
-    Hello {{ request.user.first_name }},
+    Hello {{ request.user.username }}:
     <u><a href="{% url "logout" %}">Logout</a></u>
     {% else %}
     <u><a href="{% url "login" %}">Log-in</a></u>

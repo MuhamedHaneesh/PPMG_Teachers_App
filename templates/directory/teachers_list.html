@@ -1,0 +1,70 @@
+{% extends "home.html" %}
+{% block title %}Teachers{% endblock %}
+{% block content %}
+<h1>Teachers List</h1>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+
+
+</style>
+{% if request.user.is_authenticated %}
+<h3><a style="margin-left:75%" href="{% url 'import' %}">File Upload</a></h3>
+{% endif %}
+<div>
+    <div style="display:flex">
+        <h4 style="font-weight:bold">Filter by Last Name :</h4>
+        <p>
+            <select onchange="location = this.value;">
+                {% for chr in last_name_chars%}
+                <option value="{% url 'teachers_list' %}?val={{chr}}&type=name" selected="{{this.value}}">{{chr}}</option>
+                <!--            <a href="{% url 'teachers_list' %}?val={{chr}}&type=name">{{chr}}</a>-->
+                {% endfor %}
+            </select>
+        </p>
+    </div>
+    <div style="display:flex">
+        <h4 style="font-weight:bold">Filter by Subject :</h4>
+
+        <p style="margin-left:3%">
+            {% for chr in subject_chars%}
+            <a href="{%url 'teachers_list' %}?val={{chr}}&type=subject">{{chr}}</a>
+            {% endfor %}
+        </p>
+    </div>
+</div>
+<table>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th></th>
+    </tr>
+    {% for teacher in object_list %}
+    <tr>
+        <td>{{ teacher.first_name }}</td>
+        <td>{{teacher.last_name}}</td>
+        <td><a href="{% url 'teacher_profile' teacher.id %}">About</a></td>
+    </tr>
+    {% empty %}
+    <p>There is no teacher details to show. please create and try</p>
+    {% endfor %}
+    <p>
+
+    </p>
+    </div>
+    {% endblock %}
+</table>

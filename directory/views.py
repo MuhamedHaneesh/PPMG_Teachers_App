@@ -8,7 +8,7 @@ from .models import Teacher, Subject
 from .forms import UploadFileForm
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
-import os
+import os, shutil
 import csv
 from io import TextIOWrapper
 from zipfile import ZipFile
@@ -18,7 +18,7 @@ from django.core.files import File
 
 # Create your views here.
 class UploadFilesView(LoginRequiredMixin, TemplateResponseMixin, View):
-    template_name = 'contact/import.html'
+    template_name = 'directory/import.html'
 
     def get(self, request, *args, **kwargs):
         form = UploadFileForm()
@@ -70,12 +70,29 @@ class UploadFilesView(LoginRequiredMixin, TemplateResponseMixin, View):
             messages.info(request, e)
         finally:
             archived_images.close();
-        return render(request, self.template_name, {'form': form})
 
 
 class TeachersListView(ListView):
     model = Teacher
-    template_name = 'contact/teachers_list.html'
+    template_name = 'directory/teachers_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_name_chars = []
+        subject_chars = []
+        for row in Teacher.objects.values_list('last_name', flat=True).filter(
+                last_name__isnull=False).exclude(last_name='').order_by('last_name').distinct():
+            first_char = row.strip().upper()[0]
+            if first_char not in last_name_chars:
+                last_name_chars.append(first_char)
+        for row in Subject.objects.values_list('name', flat=True).filter(
+                name__isnull=False).exclude(name='').order_by('name').distinct():
+            first_char = row.strip().upper()[0]
+            if first_char not in subject_chars:
+                subject_chars.append(first_char)
+        context['last_name_chars'] = last_name_chars
+        context['subject_chars'] = subject_chars
+        return context
 
     def get_queryset(self):
         queryset = self.model.objects.all()
