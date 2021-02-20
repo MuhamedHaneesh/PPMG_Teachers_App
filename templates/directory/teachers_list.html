@@ -29,12 +29,9 @@ tr:nth-child(even) {
     <div style="display:flex">
         <h4 style="font-weight:bold">Filter by Last Name :</h4>
         <p>
-            <select onchange="location = this.value;">
                 {% for chr in last_name_chars%}
-                <option value="{% url 'teachers_list' %}?val={{chr}}&type=name" selected="{{this.value}}">{{chr}}</option>
-                <!--            <a href="{% url 'teachers_list' %}?val={{chr}}&type=name">{{chr}}</a>-->
+                    <a href="{% url 'teachers_list' %}?val={{chr}}&type=name">{{chr}}</a>
                 {% endfor %}
-            </select>
         </p>
     </div>
     <div style="display:flex">
